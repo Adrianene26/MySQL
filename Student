@@ -1,0 +1,65 @@
+package com.cursmysql;
+
+
+import javax.xml.transform.Result;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+//STEP 1. Import required packages
+public class Student {
+    private String numar_matricol;
+    private String nume;
+    private String prenume;
+    private String cnp;
+    private String data_nasterii;
+
+
+
+
+    public Student(String nrMatricol, String nume, String prenume, String cnp, String dataNastere){
+        this.numar_matricol = nrMatricol;
+        this.nume = nume;
+        this.prenume = prenume;
+        this.cnp = cnp;
+        this.data_nasterii = dataNastere;
+    }
+    public String getNrMatricol() { return  numar_matricol; }
+    public String getNume() { return nume;}
+    public String getPrenume() { return  prenume; }
+    public String getCnp() { return cnp; }
+    public String getDataNastere() { return data_nasterii; }
+    public static void showStudents(){
+        String sql = "SELECT * FROM studenti";
+        Connection connection = DbConnector.getDbConnector();
+        Statement statement;
+        ResultSet result;
+        try {
+            //STEP 4: Execute a query
+            statement = connection.createStatement();
+            result = statement.executeQuery(sql);
+            int count = 0;
+            //STEP 5: Extract data from result set
+            while (result.next()){
+                //Retrieve by colum order
+                Integer id = result.getInt(1);
+                String nrMatricol = result.getString(2);
+                String nume = result.getString(3);
+                String prenume = result.getString(4);
+                // String output = "Student #%d: %d - %s - %s - %s";
+                //System.out.println(String.format(output, ++count, id, nrMatricol, nume, prenume));
+                ++count;
+                System.out.println("Student: Nr - "+count+" ID: "+id+" Nr. Matricol: "+nrMatricol+ " Nume: " +nume+ "Prenume" +prenume );
+            }
+
+        }
+        catch (SQLException e) {
+            System.out.println("Query error.");
+        }
+        catch (NullPointerException e) {
+            System.out.println("Element not found");
+        }
+    }
+}
+
